@@ -2,46 +2,26 @@ require 'digest'
 require 'uri'
 require 'cgi'
 require 'net/http'
-require 'nokogiri'
 require 'date'
 
 module ECpayLogistics
     class APIHelper
-        conf = File.join(File.dirname(__FILE__), '..', '..', 'conf', 'logistics_conf.xml')
-        @@conf_xml = Nokogiri::XML(File.open(conf))
+        attr_accessor :options
 
-        def initialize
-            active_merc_info = @@conf_xml.xpath('/Conf/MercProfile').text
-            @op_mode = @@conf_xml.xpath('/Conf/OperatingMode').text
-            @contractor_stat = @@conf_xml.xpath('/Conf/IsProjectContractor').text
-            merc_info = @@conf_xml.xpath("/Conf/MerchantInfo/MInfo[@name=\"#{active_merc_info}\"]")
-            @ignore_payment = []
-            @merc_tra_date = Time.now.strftime('%Y/%m/%d %H:%M:%S')
-            @@conf_xml.xpath('/Conf/IgnorePayment//Method').each {|t| @ignore_payment.push(t.text)}
-            if merc_info != []
-                @merc_id = merc_info[0].xpath('./MerchantID').text.freeze
-                @hkey = merc_info[0].xpath('./HashKey').text.freeze
-                @hiv = merc_info[0].xpath('./HashIV').text.freeze
-
-            else
-                raise "Specified merchant setting name (#{active_merc_info}) not found."
-            end
+        def initialize options = nil
+            self.options = options || Rails.configuration.ecpay
         end
 
         def get_mercid()
-            return @merc_id
-        end
-
-        def get_merc_tra_date()
-            return @merc_tra_date
+            return options['merchant_id']
         end
 
         def get_op_mode()
-            return @op_mode
+            return options['operating_mode']
         end
 
         def get_ignore_pay()
-            return @ignore_payment
+            return options['ignore_payment']
         end
 
         def get_curr_unixtime()
@@ -49,9 +29,9 @@ module ECpayLogistics
         end
 
         def is_contractor?()
-            if @contractor_stat == 'N'
+            if options['is_project_contractor'] == 'N'
                 return false
-            elsif @contractor_stat == 'Y'
+            elsif options['is_project_contractor'] == 'Y'
                 return true
             else
                 raise "Unknown [IsProjectContractor] configuration."
@@ -104,7 +84,7 @@ module ECpayLogistics
                 end
 
                 raw = params.sort_by{|key,val|key.downcase}.map!{|key,val| "#{key}=#{val}"}.join('&')
-                raw = self.urlencode_dot_net(["HashKey=#{@hkey}", raw, "HashIV=#{@hiv}"].join("&"), case_tr: 'DOWN')
+                raw = self.urlencode_dot_net(["HashKey=#{options['hash_key']}", raw, "HashIV=#{options['hash_iv']}"].join("&"), case_tr: 'DOWN')
                 p raw
 
 
