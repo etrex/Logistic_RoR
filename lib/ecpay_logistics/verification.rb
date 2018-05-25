@@ -274,10 +274,12 @@ module ECpayLogistics
         						if params['ScheduledDeliveryTime'].to_s == '5'
         							raise ECpayLogisticsRuleViolate, "[ScheduledDeliveryTime] can not be '#{params['ScheduledDeliveryTime'].to_s}' when [LogisticsSubType] is ECAN."
         						end
-        						# [LogisticsSubType]為ECAN => PackageCount 範圍為1到999
-        						if params['PackageCount'].nil? or params['PackageCount'].to_i < 1 or params['PackageCount'].to_i > 999
-        							raise ECpayLogisticsRuleViolate, "[PackageCount] of should be between 1 and 999 when [LogisticsSubType] is ECAN."
-        						end
+                                # [LogisticsSubType]為ECAN => PackageCount 範圍為1到999
+                                if params['PackageCount'].present?
+            						if params['PackageCount'].to_i < 1 or params['PackageCount'].to_i > 999
+            							raise ECpayLogisticsRuleViolate, "[PackageCount] of should be between 1 and 999 when [LogisticsSubType] is ECAN."
+                                    end
+                                end
 
 		              # [LogisticsType]為Home且[LogisticsSubType]為TCAT
 	                elsif params['LogisticsSubType'].to_s == 'TCAT'
@@ -559,10 +561,12 @@ module ECpayLogistics
           						if params['ScheduledDeliveryTime'].to_s == '5'
           							raise ECpayLogisticsRuleViolate, "[ScheduledDeliveryTime] can not be '#{params['ScheduledDeliveryTime'].to_s}' when [LogisticsSubType] is ECAN."
           						end
-          						# [LogisticsSubType]為ECAN => PackageCount 範圍為1到999
-          						if params['PackageCount'].to_i < 1 or params['PackageCount'].to_i > 999
-          							raise ECpayLogisticsRuleViolate, "[PackageCount] of should be between 1 and 999 when [LogisticsSubType] is ECAN."
-          						end
+                                  # [LogisticsSubType]為ECAN => PackageCount 範圍為1到999
+                                if params['PackageCount'].present?
+                                    if params['PackageCount'].to_i < 1 or params['PackageCount'].to_i > 999
+                                        raise ECpayLogisticsRuleViolate, "[PackageCount] of should be between 1 and 999 when [LogisticsSubType] is ECAN."
+                                    end
+                                end
 
   		              # [LogisticsSubType]為TCAT
   	                elsif params['LogisticsSubType'].to_s == 'TCAT'
