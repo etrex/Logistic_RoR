@@ -129,14 +129,14 @@
             <option>0003</option>
             <option>0004</option>
           </param>
-          <param type="Opt" require="1" name="ScheduledPickupTime">
+          <param type="Opt" require="0" name="ScheduledPickupTime">
             <option>1</option>
             <option>2</option>
             <option>3</option>
             <option>4</option>
             <option></option>
           </param>
-          <param type="Opt" require="1" name="ScheduledDeliveryTime">
+          <param type="Opt" require="0" name="ScheduledDeliveryTime">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -147,10 +147,10 @@
             <option>23</option>
             <option></option>
           </param>
-          <param type="String" require="1" name="ScheduledDeliveryDate">
+          <param type="String" require="0" name="ScheduledDeliveryDate">
             <pattern>^(\d{4}\/\d{2}\/\d{2}|)$</pattern>
           </param>
-          <param type="String" require="1" name="PackageCount">  <!-- Patten of this column is defined in verification.rb??? -->
+          <param type="String" require="0" name="PackageCount">  <!-- Patten of this column is defined in verification.rb??? -->
           </param>
         </condparam>
       </param>
