@@ -275,7 +275,7 @@ module ECpayLogistics
         							raise ECpayLogisticsRuleViolate, "[ScheduledDeliveryTime] can not be '#{params['ScheduledDeliveryTime'].to_s}' when [LogisticsSubType] is ECAN."
         						end
         						# [LogisticsSubType]為ECAN => PackageCount 範圍為1到999
-        						if params['PackageCount'].to_i < 1 or params['PackageCount'].to_i > 999
+        						if params['PackageCount'].nil? or params['PackageCount'].to_i < 1 or params['PackageCount'].to_i > 999
         							raise ECpayLogisticsRuleViolate, "[PackageCount] of should be between 1 and 999 when [LogisticsSubType] is ECAN."
         						end
 
