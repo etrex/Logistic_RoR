@@ -71,7 +71,25 @@ module ECpayLogistics
             end
         end
 
+        def base_proc!(params:)
+            if params.is_a?(Hash)
+                # Transform param key to string
+                params.stringify_keys()
 
+                # Process PlatformID & MerchantID by contractor setting
+                if @helper.is_contractor?
+                    params['PlatformID'] = @helper.get_mercid
+                    if params['MerchantID'].nil?
+                        raise "[MerchantID] should be specified when you're contractor-Platform."
+                    end
+                else
+                    params['PlatformID'] = ''
+                    params['MerchantID'] = @helper.get_mercid
+                end
+            else
+                raise ECpayInvalidParam, "Recieved parameter object must be a Hash"
+            end
+        end
 
         def gen_chk_mac_value(params, mode: 1)
             if params.is_a?(Hash)
