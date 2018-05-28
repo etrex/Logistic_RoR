@@ -71,7 +71,7 @@ module ECpayLogistics
             end
         end
 
-        def base_proc!(params:)
+        def base_proc!(params)
             if params.is_a?(Hash)
                 # Transform param key to string
                 params.stringify_keys()
