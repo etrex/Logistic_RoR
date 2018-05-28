@@ -77,14 +77,14 @@ module ECpayLogistics
                 params.stringify_keys()
 
                 # Process PlatformID & MerchantID by contractor setting
-                if @helper.is_contractor?
-                    params['PlatformID'] = @helper.get_mercid
+                if is_contractor?
+                    params['PlatformID'] = get_mercid
                     if params['MerchantID'].nil?
                         raise "[MerchantID] should be specified when you're contractor-Platform."
                     end
                 else
                     params['PlatformID'] = ''
-                    params['MerchantID'] = @helper.get_mercid
+                    params['MerchantID'] = get_mercid
                 end
             else
                 raise ECpayInvalidParam, "Recieved parameter object must be a Hash"
